@@ -128,79 +128,25 @@ setup_target_flags() {
 			filter-flags "-fcall-used-g7"
 			append-flags "-fcall-used-g6"
 
-			# If the CHOST is the basic one (e.g. not sparcv9-xxx already),
-			# try to pick a better one so glibc can use cpu-specific .S files.
-			# We key off the CFLAGS to get a good value.  Also need to handle
-			# version skew.
-			# We can't force users to set their CHOST to their exact machine
-			# as many of these are not recognized by config.sub/gcc and such :(.
-			# Note: If the mcpu values don't scale, we might try probing CPP defines.
-			# Note: Should we factor in -Wa,-AvXXX flags too ?  Or -mvis/etc... ?
-
+			# For the most part, glibc >= 2.13 uses multiarch to build in code
+			# for all supported cpus, and ifuncs to select at runtime.  But we
+			# do want to get the broad strokes -- v7 vs v8 vs v9.
 			local cpu
-			case ${CTARGET} in
-			sparc64-*)
-				case $(get-flag mcpu) in
-				niagara[234])
-					if version_is_at_least 2.8 ; then
-						cpu="sparc64v2"
-					elif version_is_at_least 2.4 ; then
-						cpu="sparc64v"
-					elif version_is_at_least 2.2.3 ; then
-						cpu="sparc64b"
-					fi
-					;;
-				niagara)
-					if version_is_at_least 2.4 ; then
-						cpu="sparc64v"
-					elif version_is_at_least 2.2.3 ; then
-						cpu="sparc64b"
-					fi
-					;;
-				ultrasparc3)
-					cpu="sparc64b"
-					;;
-				*)
-					# We need to force at least v9a because the base build doesn't
-					# work with just v9.
-					# https://sourceware.org/bugzilla/show_bug.cgi?id=19477
-					[[ -z ${cpu} ]] && append-flags "-Wa,-xarch=v9a"
-					;;
-				esac
+			case ${ABI} in
+			sparc64)
+				# Sparc64 is automatically v9.
+				cpu=sparc64
 				;;
-			sparc-*)
+			sparc32)
 				case $(get-flag mcpu) in
-				niagara[234])
-					if version_is_at_least 2.8 ; then
-						cpu="sparcv9v2"
-					elif version_is_at_least 2.4 ; then
-						cpu="sparcv9v"
-					elif version_is_at_least 2.2.3 ; then
-						cpu="sparcv9b"
-					else
-						cpu="sparcv9"
-					fi
-					;;
-				niagara)
-					if version_is_at_least 2.4 ; then
-						cpu="sparcv9v"
-					elif version_is_at_least 2.2.3 ; then
-						cpu="sparcv9b"
-					else
-						cpu="sparcv9"
-					fi
-					;;
-				ultrasparc3)
-					cpu="sparcv9b"
-					;;
-				v9|ultrasparc)
+				v9|ultrasparc*|niagara*)
 					cpu="sparcv9"
 					;;
 				v8|supersparc|hypersparc|leon|leon3)
 					cpu="sparcv8"
 					;;
 				esac
-			;;
+				;;
 			esac
 			[[ -n ${cpu} ]] && CTARGET_OPT="${cpu}-${CTARGET#*-}"
 		;;
