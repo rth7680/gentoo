@@ -1,0 +1,3 @@
+# Force the flag corresponding to the only ABI.
+-abi_sparc_32
+abi_sparc_64

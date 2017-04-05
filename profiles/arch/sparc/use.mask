@@ -4,6 +4,9 @@
 # Unmask the flag which corresponds to ARCH.
 -sparc
 
+# Unmake ABI flags for this arch.
+-abi_sparc_32
+
 # This file contains a list of useflags that cannot be used on sparc.
 
 # Andreas Sturmlechner <asturm@gentoo.org> (25 Feb 2017)
@@ -238,10 +241,6 @@ alsa_cards_wavefront
 
 # Copied over from default-linux/sparc/sparc64
 -vis
-
-# The default on SPARC is non-multilib
-# if a sub-profile want's it, it can -use.mask it
-multilib
 
 # Ben de Groot <yngwin@gentoo.org> (11 Feb 2009)
 # Both dev-qt/qtphonon and media-sound/phonon are unkeyworded

@@ -1,2 +1,8 @@
 # Force the flag which corresponds to ARCH.
 sparc
+
+# Force the flag corresponding to the only ABI.
+abi_sparc_32
+
+# We do not have multilib by default.
+-multilib
