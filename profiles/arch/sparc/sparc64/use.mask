@@ -1,3 +1,0 @@
-# Switch ABI flags for this arch.
-abi_sparc_32
--abi_sparc_64
