@@ -358,3 +358,6 @@ app-admin/rsyslog zeromq
 # Marius Brehler <marfbre@linux.sungazer.de> (13 Aug 2015)
 # missing keyword
 >=sci-misc/boinc-7.4.42-r1 X
+
+# The sparcv8 assembly is missing an .arch directive
+dev-libs/openssl asm
